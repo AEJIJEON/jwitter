@@ -6,6 +6,7 @@ const NweetFactory = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [attachment, setAttachment] = useState("");
   const onSubmit = async (event) => {
+    event.preventDefault();
     if (nweet === "") {
       return;
     }
@@ -55,7 +56,7 @@ const NweetFactory = ({ userObj }) => {
         value={nweet}
         onChange={onChange}
         type="text"
-        placeholder="What's on your mind?"
+        placeholder="What's on your mind???"
         maxLength={120}
       />
       <input type="file" accept="image/*" onChange={onFileChange} />

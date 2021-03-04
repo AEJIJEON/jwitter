@@ -1,15 +1,36 @@
-import React, { useState } from "react";
-import { authService } from "fbase";
+import React, {  useEffect, useState } from "react";
+import { authService, dbService, storageService } from "fbase";
 import { useHistory } from "react-router-dom";
 import ProfilePhoto from "components/ProfilePhoto";
 const Profile = ({ refreshUser, userObj }) => {
   const history = useHistory();
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
-  const [photo, setPhoto] = useState("");
+  const [photoInfo, setPhotoInfo] = useState(null);
+  const [mounted, setMounted] = useState(false);
   const onLogOutClick = () => {
     authService.signOut();
     history.push("/");
   };
+    useEffect(() => {
+      dbService.collection("userPhotos").onSnapshot((snapshot) => {
+      
+        snapshot.docs.forEach((doc) => {
+          let newPhotoInfo;
+          if (userObj.uid === doc.data().uid){
+            newPhotoInfo = {
+              id: doc.id,
+              photoUrl: doc.data().photoUrl
+            }
+            setPhotoInfo(newPhotoInfo);
+          }}
+        );
+      });
+      setMounted(true);
+    }, [userObj]);
+
+
+
+
 
   const onChange = (event) => {
     const {
@@ -26,6 +47,17 @@ const Profile = ({ refreshUser, userObj }) => {
       refreshUser();
     }
   };
+  const onDeleteClick = async () => {
+
+    const ok = window.confirm("Are you sure you want to delete this photo?");
+    if (ok) {
+        await dbService.doc(`userPhotos/${photoInfo.id}`).delete();
+        await storageService.refFromURL(photoInfo.photoUrl).delete();
+        
+        setPhotoInfo(null);
+      }
+    };
+  
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -39,10 +71,14 @@ const Profile = ({ refreshUser, userObj }) => {
         <input type="submit" value="Update Profile" />
       </form>
       <>
-        <ProfilePhoto setPhoto={setPhoto} />
-        {photo && <img src={photo} width="50px" height="50px" alt="" />}
-        <button onClick={onLogOutClick}>Log Out</button>
+        {mounted && photoInfo ?
+        <>
+        <img src={photoInfo.photoUrl} width="50px" height="50px" alt="" />
+        <button onClick = {() => onDeleteClick()}>Delete Photo</button>
+        </>
+        : <ProfilePhoto userObj = {userObj} setPhotoInfo={setPhotoInfo} />}
       </>
+      <button onClick={() => onLogOutClick()}>Log Out</button>
     </>
   );
 };
