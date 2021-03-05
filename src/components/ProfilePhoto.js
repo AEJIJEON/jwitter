@@ -1,7 +1,7 @@
 import { dbService, storageService } from "fbase";
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-const ProfilePhoto = ({  userObj, setPhotoInfo }) => {
+const ProfilePhoto = ({ userObj, setPhotoInfo }) => {
   const [attachment, setAttachment] = useState("");
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -13,18 +13,25 @@ const ProfilePhoto = ({  userObj, setPhotoInfo }) => {
       const response = await attachmentRef.putString(attachment, "data_url");
       attachmentUrl = await response.ref.getDownloadURL();
     }
-    
-    const photoDoc = await dbService.collection("userPhotos").add({
-      uid: userObj.uid,
-      photoUrl: attachmentUrl
+
+    var docId;
+    const userInfosRef = await dbService.collection("userInfos").get();
+    userInfosRef.docs.forEach((doc) => {
+      if (userObj.uid === doc.data().uid) {
+        docId = doc.id;
+      }
+    });
+    // display name, profile photo는 실시간 update 적용시키지 x
+    // reload시에 변경되도록..!
+    await dbService.doc(`userInfos/${docId}`).update({
+      photoUrl: attachmentUrl,
     });
     const newPhotoInfo = {
-      id: photoDoc.id,
-      photoUrl: attachmentUrl
-    }
+      docId: docId,
+      photoUrl: attachmentUrl,
+    };
     setAttachment("");
     setPhotoInfo(newPhotoInfo);
-
   };
 
   const onFileChange = (event) => {
@@ -45,11 +52,12 @@ const ProfilePhoto = ({  userObj, setPhotoInfo }) => {
   return (
     <form onSubmit={onSubmit}>
       <input type="file" accept="image/*" onChange={onFileChange} />
-      {attachment && 
-      <>
-      <img src={attachment} width="50px" height="50px" alt="" />
-      <button onClick={clearPhoto}>Clear</button>
-      </>}
+      {attachment && (
+        <>
+          <img src={attachment} width="50px" height="50px" alt="" />
+          <button onClick={clearPhoto}>Clear</button>
+        </>
+      )}
       <input type="submit" value="Add Photo" />
     </form>
   );

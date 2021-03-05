@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { authService } from "fbase";
+import { authService, dbService } from "fbase";
 
 const AuthForm = () => {
   const [email, setEmail] = useState("");
@@ -25,10 +25,17 @@ const AuthForm = () => {
           email,
           password
         );
+        //userInfos 추가
+        const newInfo = {
+          uid: data.user.uid,
+          photoUrl: "",
+          // 처음에는 null로 설정됨
+          displayName: "not set",
+        };
+        await dbService.collection("userInfos").add(newInfo);
       } else {
         data = await authService.signInWithEmailAndPassword(email, password);
       }
-      console.log(data);
     } catch (error) {
       setError(error.message);
     }
