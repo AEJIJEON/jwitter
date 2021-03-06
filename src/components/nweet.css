@@ -1,0 +1,55 @@
+.nweetInputText {
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.nweetContainer {
+  border: 1px solid black;
+  margin: 10px;
+  display: inline-block;
+  border-radius: 5px;
+}
+.nweet-user-infos {
+  /* width: 20%;
+  float: left; */
+  border: 1px solid black;
+  margin: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.nweet-user-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  padding: 10px;
+}
+.nweet-infos {
+  /* width: 80%;
+  float: left; */
+  padding: 5px;
+  margin: 10px;
+  display: inline-block;
+  border: 1px solid black;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.nweet-photo {
+  width: 100px;
+  height: 70px;
+  padding: 10px;
+  /* width: 20%;
+  float: left; */
+}
+
+.nweet-text {
+  margin-top: 0;
+  margin-bottom: 10px;
+  /* width: 100%;
+  float: left; */
+}
+
+.nweet-user-name {
+  margin: 10px;
+}

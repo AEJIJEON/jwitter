@@ -1,0 +1,13 @@
+.homeContainer {
+  float: left;
+  padding: 10px;
+}
+
+.profileContainer {
+  float: left;
+  padding: 10px;
+}
+
+.menuContainer {
+  height: 45px;
+}

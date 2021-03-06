@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { authService, dbService, storageService } from "fbase";
 import { useHistory } from "react-router-dom";
 import ProfilePhoto from "components/ProfilePhoto";
+import "routes/profile.css";
 const Profile = ({ refreshUser, userObj }) => {
   const history = useHistory();
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
@@ -74,8 +75,10 @@ const Profile = ({ refreshUser, userObj }) => {
 
   return (
     <>
+      <button onClick={() => onLogOutClick()}>Log Out</button>
       <form onSubmit={onSubmit}>
         <input
+          className="profileNameText"
           onChange={onChange}
           type="text"
           placeholder="Display name"
@@ -87,14 +90,17 @@ const Profile = ({ refreshUser, userObj }) => {
       <>
         {mounted && photoInfo.photoUrl ? (
           <>
-            <img src={photoInfo.photoUrl} width="50px" height="50px" alt="" />
-            <button onClick={() => onDeleteClick()}>Delete Photo</button>
+            <div>
+              <img src={photoInfo.photoUrl} alt="" className="profile-photo" />
+            </div>
+            <div>
+              <button onClick={() => onDeleteClick()}>Delete Photo</button>
+            </div>
           </>
         ) : (
           <ProfilePhoto userObj={userObj} setPhotoInfo={setPhotoInfo} />
         )}
       </>
-      <button onClick={() => onLogOutClick()}>Log Out</button>
     </>
   );
 };

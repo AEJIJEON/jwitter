@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { authService, dbService } from "fbase";
 import Nweet from "components/Nweet";
 import NweetFactory from "components/NweetFactory";
+import "components/home.css";
 const onLogOutClick = async () => {
   await authService.signOut();
 };
@@ -41,18 +42,18 @@ const Home = ({ userObj }) => {
   }, []);
   return (
     <>
-      <button onClick={() => onLogOutClick()}>Log Out</button>
-      <div>
+      <div className="logoutAndNweetForm">
+        <button onClick={() => onLogOutClick()}>Log Out</button>
         <NweetFactory userObj={userObj} />
-        <div>
-          {nweets.map((nweet) => (
-            <Nweet
-              key={nweet.id}
-              nweetObj={nweet}
-              isOwner={nweet.creatorId === userObj.uid}
-            />
-          ))}
-        </div>
+      </div>
+      <div className="nweetsContainer">
+        {nweets.map((nweet) => (
+          <Nweet
+            key={nweet.id}
+            nweetObj={nweet}
+            isOwner={nweet.creatorId === userObj.uid}
+          />
+        ))}
       </div>
     </>
   );

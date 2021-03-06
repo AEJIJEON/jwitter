@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { storageService, dbService } from "fbase";
-
 const NweetFactory = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [attachment, setAttachment] = useState("");
@@ -53,6 +52,7 @@ const NweetFactory = ({ userObj }) => {
   return (
     <form onSubmit={onSubmit}>
       <input
+        className="nweetInputText"
         value={nweet}
         onChange={onChange}
         type="text"
