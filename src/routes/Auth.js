@@ -25,7 +25,7 @@ const Auth = () => {
       }
     });
 
-    //새로운 user의 경우 -> userInfos collection에 정보 추가
+    //새로운 user의 경우 -> userInfos collection에 정보 추가하기
     if (isNew) {
       newInfo = {
         uid: data.user.uid,
